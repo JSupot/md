@@ -168,6 +168,16 @@ function getFriends() {
 
 社区中已经有idx对应的marco，[idx.macro](https://github.com/dralletje/idx.macro)
 
+### babel cache 引发的问题
+
+在实际的项目中，我们会对babel-loader开启cache功能，所有使用babel-loader的文件进行缓存，以加快webpack编译的速度。
+
+对于使用babel marco的文件，cache也是生效的。如果marco不是一个纯函数，编译的结果可能会和预期的结果有出入。
+
+比如一个处理json文件的宏，目标的json文件已经修改了，但是使用宏的文件没有做任何代码的改动，那么还是会使用cache中的代码，即上一次解析未改动的json文件产生的结果。
+
+解决方法可以直接关闭babel-loader的缓存功能，但是这个可能会影响项目的编译速度；第二种是在使用macro的地方增加一个注释，来告诉babel-loader这个地方需要重新编译。
+
 ## 如何编写一个marco
 
 babel-plugin-marcos提供了一个实现宏的规范，但它还是基于babel来实现的。所以要开发一个marco，要对babel有一定的了解。
